@@ -44,7 +44,7 @@ end
 
 --
 -- Shows the SeedRaid window.
--- 
+--
 SLASH_SHOW1 = "/sr_show"
 function SlashCmdList.SHOW(msg, editbox)
   if not SeedRaid or SeedRaid.frame then
@@ -54,8 +54,26 @@ function SlashCmdList.SHOW(msg, editbox)
 end
 
 --
+-- Shows the SeedRaid window.
+--
+SLASH_EXPORT1 = "/sr_export"
+function SlashCmdList.EXPORT(msg, editbox)
+  header = "Instructions: Copy the whole text and paste it at http://url\n"
+  header = header .. "Tips: don't worry about the instructions you can copy everything\n"
+  header = header .. "------------------------\n"
+  export_text = header .. SeedRaid.Serialize()
+  SeedRaid.frame:Show()
+  -- show the appropriate frames
+  SeedRaidCopyFrame:Show()
+  SeedRaidCopyFrameScroll:Show()
+  SeedRaidCopyFrameScrollText:Show()
+  SeedRaidCopyFrameScrollText:SetText(export_text)
+  SeedRaidCopyFrameScrollText:HighlightText()
+end
+
+--
 -- Toggles printing of errors.
--- 
+--
 SLASH_ERRORS1 = "/sr_errors"
 function SlashCmdList.ERRORS(msg, editbox)
   if not SeedRaid then
@@ -67,7 +85,7 @@ end
 
 --
 -- Toggles acting as raid leader.
--- 
+--
 SLASH_LEADER1 = "/sr_leader"
 function SlashCmdList.LEADER(msg, editbox)
   if not SeedRaid then
@@ -326,7 +344,7 @@ function SeedRaid.LootReceieved(...)
   end
 
   local member = SeedRaidSaves.membersByGUID[guid]
-  
+
   if member.loots[loot] == nil then
     member.loots[loot] = count
   else
@@ -396,7 +414,7 @@ function SeedRaid.OnEventP(event, ...)
       SeedRaidSaves.icon = {hide = false}
       SeedRaidSaves.visible = true
     end
-    
+
     SeedRaid.inGroupOrRaid = IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInRaid()
 
   elseif event == "PLAYER_LOGIN" then
@@ -442,6 +460,11 @@ function SeedRaid.OnEventP(event, ...)
   end
 end
 
+function SeedRaid.Serialize()
+  local libS = LibStub:GetLibrary("AceSerializer-3.0")
+  local data = libS:Serialize(SeedRaidSaves)
+  return data
+end
 --
 -- Scrolls a list when mousewheel is scrolled.
 --
@@ -776,7 +799,7 @@ function SeedRaid:UpdateMembers()
       end
     end
   end
-  
+
   local inGroupOrRaid = IsInGroup(LE_PARTY_CATEGORY_HOME) and IsInRaid()
   if not SeedRaid.inGroupOrRaid and inGroupOrRaid then
     StaticPopup_Show("SeedRaid_Clear")
@@ -816,7 +839,7 @@ function SeedRaid:UpdateRaidDisplay()
   local left, bottom, width, height = SR:GetRect()
   local width = right - left
   SR:SetWidth(width)
-  
+
   SR_SeedCount:SetText(SeedRaidSaves.seedCount)
   SR_RoundSize:SetText(SeedRaidSaves.roundSize)
   SR_AlertInterval:SetText(SeedRaidSaves.alertInterval)
@@ -933,14 +956,14 @@ function SeedRaid:UpdateRaidDisplay()
     else
       frame:SetPoint("TOPLEFT")
     end
-    
+
     local text = "" .. lootCount .. " " .. loot
     frame.text:SetText(text)
 
     previous = frame
     count = count + 1
   end
-  
+
   -- Adjust scrollbar
   if previous then
     local entryHeight = previous:GetHeight()
@@ -977,7 +1000,7 @@ end
 --
 -- Returns a table iterator, which is sorted by the table key.
 -- @param t The table to iterate.
--- 
+--
 function SeedRaid:orderedPairs(t)
   local ordered = {}
   for key, value in pairs(t) do
@@ -1057,19 +1080,19 @@ end
 -- -----------------------------------------------------------------------------
 
 function SeedRaid.Initialize()
-  SeedRaid.scrollbar:SetValue(1) 
+  SeedRaid.scrollbar:SetValue(1)
   SeedRaid.scrollbar:SetMinMaxValues(1, 1)
   SeedRaid.scrollbar:SetWidth(16)
 
-  SeedRaid.scrollbarPlanted:SetValue(1) 
+  SeedRaid.scrollbarPlanted:SetValue(1)
   SeedRaid.scrollbarPlanted:SetMinMaxValues(1, 1)
   SeedRaid.scrollbarPlanted:SetWidth(16)
   SeedRaid.scrollbarPlanted:Hide()
 
-  SeedRaid.scrollbarLoot:SetValue(1) 
+  SeedRaid.scrollbarLoot:SetValue(1)
   SeedRaid.scrollbarLoot:SetMinMaxValues(1, 1)
   SeedRaid.scrollbarLoot:SetWidth(16)
-  
+
   if SeedRaidSaves.visible then
     SeedRaid.frame:Show()
   else
