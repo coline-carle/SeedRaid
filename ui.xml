@@ -1,0 +1,255 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/">
+
+<!--           -->
+<!-- TEMPLATES -->
+<!--           -->
+
+<!-- List/Table Entry -->
+<CheckButton name="SR_EntryTemplate" virtual="true">
+  <Size x="128" y="15"/>
+  <Anchors>
+    <Anchor point="TOPLEFT"/>
+  </Anchors>
+  <!-- <NormalTexture setallpoints="true">
+    <Color b="1"/>
+  </Texture> -->
+  <!-- <PushedTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar-Blue.png"/> -->
+  <HighlightTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar-Blue.png" alphaMode="ADD"/>
+  <CheckedTexture file="Interface\FriendsFrame\UI-FriendsFrame-HighlightBar-Blue.png"/>
+  <!-- <DisabledCheckedTexture file="Interface\Buttons\UI-CheckBox-Check-Disabled"/> -->
+
+  <!-- <HighlightTexture name="$parent_Highlight" setallpoints="true">
+    <Color b="1"/>
+  </HighlightTexture>
+  <CheckedTexture name="$parent_Checked" setallpoints="true">
+    <Color b="1" a="0.25" alphaMode="ADD"/>
+  </CheckedTexture> -->
+</CheckButton>
+
+<!-- Edit Box -->
+<EditBox name="SR_EditBoxTemplate" font="CombatLogFont" letters="3" numeric="true" autoFocus="false" virtual="true">
+  <Size x="36" y="20"/>
+
+  <Backdrop
+    bgFile="Interface\TutorialFrame\TutorialFrameBackground"
+    edgeFile="Interface\DialogFrame\UI-DialogBox-Border"
+    tile="true">
+    <EdgeSize val="8"/>
+    <TileSize val="32"/>
+  </Backdrop>
+
+  <Layers>
+    <Layer level="ARTWORK">
+      <!-- <Texture name="$parent_Background" setallpoints="true">
+        <Color g="1"/>
+      </Texture> -->
+    </Layer>
+  </Layers>
+</EditBox>
+
+<!--        -->
+<!-- LAYOUT -->
+<!--        -->
+
+<Frame name="SR" enableMouse="true" movable="true" parent="UIParent">
+  <Size x="530" y="30"/>
+  <Anchors>
+    <Anchor point="CENTER"/>
+  </Anchors>
+
+  <Backdrop
+    bgFile="Interface\TutorialFrame\TutorialFrameBackground"
+    edgeFile="Interface\DialogFrame\UI-DialogBox-Border"
+    tile="true">
+    <EdgeSize val="8"/>
+    <TileSize val="32"/>
+  </Backdrop>
+
+  <Layers>
+    <Layer level="ARTWORK">
+      <!-- Circular dependency between text and edit boxes for positioning -->
+      <!-- so its done in Lua instead. -->
+      <FontString name="$parent_Title" inherits="GameFontNormal" text="Seed Raid"/>
+      <FontString name="$parent_SeedCountText" inherits="GameFontNormal" text="Seed Count"/>
+      <FontString name="$parent_RoundSizeText" inherits="GameFontNormal" text="Round Size"/>
+      <FontString name="$parent_AlertIntervalText" inherits="GameFontNormal" text="Alert Interval"/>
+    </Layer>
+  </Layers>
+
+  <Frames>
+    <!-- Titlebar Edit Boxes -->
+    <EditBox name="$parent_SeedCount" inherits="SR_EditBoxTemplate"/>
+    <EditBox name="$parent_RoundSize" inherits="SR_EditBoxTemplate"/>
+    <EditBox name="$parent_AlertInterval" inherits="SR_EditBoxTemplate"/>
+
+    <!-- Close Button -->
+    <Button name="$parent_Close" inherits="UIPanelCloseButton">
+      <Anchors>
+        <Anchor point="TOPRIGHT"/>
+      </Anchors>
+    </Button>
+
+    <!-- Raid Members Scroll/Clip Frame -->
+    <ScrollFrame name="$parent_ScrollFrame">
+      <Size x="128" y="0"/>
+      <Anchors>
+        <Anchor point="TOPLEFT" x="0" y="-30"/>
+      </Anchors>
+
+      <Layers>
+        <Layer level="ARTWORK">
+          <!-- <Texture name="$parent_Background" setallpoints="true">
+            <Color g="1"/>
+          </Texture> -->
+        </Layer>
+      </Layers>
+    
+      <Frames>
+        <!-- Raid Members Scroll Bar -->
+        <Slider name="$parent_ScrollBar"
+                inherits="UIPanelScrollBarTemplate">
+          <Anchors>
+            <Anchor point="TOPLEFT"
+                    relativePoint="TOPRIGHT"
+                    x="4" y="-16"/>
+            <Anchor point="BOTTOMLEFT"
+                    relativePoint="BOTTOMRIGHT"
+                    x="4" y="16"/>
+          </Anchors>
+          <Layers>
+            <Layer level="ARTWORK">
+              <!-- <Texture name="$parent_Background" setallpoints="true">
+                <Color r="1"/>
+              </Texture> -->
+            </Layer>
+          </Layers>
+        </Slider>
+      </Frames>
+
+      <ScrollChild>
+        <!-- Raid Members Content Frame -->
+        <Frame name="$parent_Content">
+          <Size x="128" y="0"/>
+          <Layers>
+            <Layer level="ARTWORK">
+              <!-- <Texture name="$parent_Background0" setallpoints="true">
+                <Color b="1"/>
+              </Texture> -->
+            </Layer>
+          </Layers>
+        </Frame>
+      </ScrollChild>
+    </ScrollFrame>
+
+    <!-- Seeds Planted Scroll/Clip Frame -->
+    <ScrollFrame name="$parent_ScrollFrame_Planted">
+      <Size x="128" y="0"/>
+      <Anchors>
+        <Anchor point="TOP" relativeTo="$parent_ScrollFrame" relativePoint="TOP"/>
+        <Anchor point="BOTTOM" relativeTo="$parent_ScrollFrame" relativePoint="BOTTOM"/>
+        <Anchor point="LEFT" relativeTo="$parent_ScrollFrame_ScrollBar" relativePoint="RIGHT"/>
+      </Anchors>
+
+      <Layers>
+        <Layer level="ARTWORK">
+          <!-- <Texture name="$parent_Background" setallpoints="true">
+            <Color g="1"/>
+          </Texture> -->
+        </Layer>
+      </Layers>
+    
+      <Frames>
+        <!-- Seeds Planted Scroll Bar -->
+        <Slider name="$parent_ScrollBar"
+                inherits="UIPanelScrollBarTemplate">
+          <Anchors>
+            <Anchor point="TOPLEFT"
+                    relativePoint="TOPRIGHT"
+                    x="4" y="-16"/>
+            <Anchor point="BOTTOMLEFT"
+                    relativePoint="BOTTOMRIGHT"
+                    x="4" y="16"/>
+          </Anchors>
+          <Layers>
+            <Layer level="ARTWORK">
+              <!-- <Texture name="$parent_Background" setallpoints="true">
+                <Color r="1"/>
+              </Texture> -->
+            </Layer>
+          </Layers>
+        </Slider>
+      </Frames>
+
+      <ScrollChild>
+        <!-- Seeds Planted Content Frame -->
+        <Frame name="$parent_Content">
+          <Size x="128" y="305"/>
+          <Layers>
+            <Layer level="ARTWORK">
+              <!-- <Texture name="$parent_Background0" setallpoints="true">
+                <Color b="1"/>
+              </Texture> -->
+            </Layer>
+          </Layers>
+        </Frame>
+      </ScrollChild>
+    </ScrollFrame>
+
+    <!-- Loot Scroll/Clip Frame -->
+    <ScrollFrame name="$parent_ScrollFrame_Loot">
+      <Size x="128" y="0"/>
+      <Anchors>
+        <Anchor point="TOP" relativeTo="$parent_ScrollFrame" relativePoint="TOP"/>
+        <Anchor point="BOTTOM" relativeTo="$parent_ScrollFrame" relativePoint="BOTTOM"/>
+        <Anchor point="LEFT" relativeTo="$parent_ScrollFrame_Planted_ScrollBar" relativePoint="RIGHT"/>
+      </Anchors>
+
+      <Layers>
+        <Layer level="ARTWORK">
+          <!-- <Texture name="$parent_Background" setallpoints="true">
+            <Color g="1"/>
+          </Texture> -->
+        </Layer>
+      </Layers>
+    
+      <Frames>
+        <!-- Loot Scroll Bar -->
+        <Slider name="$parent_ScrollBar"
+                inherits="UIPanelScrollBarTemplate">
+          <Anchors>
+            <Anchor point="TOPLEFT"
+                    relativePoint="TOPRIGHT"
+                    x="4" y="-16"/>
+            <Anchor point="BOTTOMLEFT"
+                    relativePoint="BOTTOMRIGHT"
+                    x="4" y="16"/>
+          </Anchors>
+          <Layers>
+            <Layer level="ARTWORK">
+              <!-- <Texture name="$parent_Background" setallpoints="true">
+                <Color r="1"/>
+              </Texture> -->
+            </Layer>
+          </Layers>
+        </Slider>
+      </Frames>
+
+      <ScrollChild>
+        <!-- Loot Content Frame -->
+        <Frame name="$parent_Content">
+          <Size x="128" y="305"/>
+          <Layers>
+            <Layer level="ARTWORK">
+              <!-- <Texture name="$parent_Background0" setallpoints="true">
+                <Color b="1"/>
+              </Texture> -->
+            </Layer>
+          </Layers>
+        </Frame>
+      </ScrollChild>
+    </ScrollFrame>
+  </Frames>
+</Frame>
+</Ui>
